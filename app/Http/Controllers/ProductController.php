@@ -77,14 +77,14 @@ class ProductController extends Controller
 
         ]);
 
-        return redirect()->back()->with('productInserted', 'Prodotto inserito');
+        return redirect()->back()->with('message', 'Prodotto inserito');
     }
 
     public function index()
     {
 
         //Faccio chiamata al DB, per richiedere tutti i prodotti con metodo all() del modello Product
-        $products = Product::all();
+        $products = Product::all(); // Equivale a query SELECT * FROM Products
 
         // passo la variabile $products alla vista index
         /* $product non è un oggetto di tipo collection, non un array di array. $name, $description e $price sono proprietà, e quindi si recuperano con la square syntax procuts[], ma con $product-> */

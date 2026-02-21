@@ -15,7 +15,7 @@
 - Cambiare tipo di dato accettato dal form tramite attributo enctype="multipart/form-data"
 
 **VIEW (CARD)**
-- Per salvare in locale, l'unica cartella visibileal browser è quella "public", "storage" non è visibile. va creato un link simbolico alla cartella storage con il comando 
+- Per salvare in locale, l'unica cartella visibile al browser è quella "public"; "storage" non è visibile. va creato un link simbolico alla cartella storage con il comando 
         php artisan storage:link // è sufficiente lanciare il comando una volta sola
 
 - Nel DB il link è salvato come img/JHw4oCWxwpbXEeqjz5V4eRKdvk3S4fMzcZggBMuX.jpg, ma il percorso nella cartella public è img/storage. Nella card va utilizzata il metodo statico Storage::url() che ricostruisce il percorso della file nella cartella storage locale

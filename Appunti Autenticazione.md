@@ -81,5 +81,57 @@ Tra le rotte disponibili c'è
 ------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------
 
-## MIDDLEWARE ##
+## MIDDLEWARE
 
+- Sono delle logiche da interporre a determinate richieste GET o POST. 
+        - ad esempio: poter accedere ad un URL solo se siamo loggati; senza nessuna logica di mezzo, anche se non trovo il link nella navbar, posso accedervi sono conoscendo l'URL.
+
+        - Le richieste GET di un URL sono gestite dalle rotte, che richiamano metodi di specifici controller.
+
+        - I middleware quindi vanno applicati a specifici controller tramite le rotte.
+
+**auth**
+- E' il middleware fornito da Fortify che effettua controlli di autenticazione.
+        - si applica così
+        Route::get('product/create', [ProductController::class, 'create'])->name('product.create')->middleware('auth);
+
+        - middleware() accetta in ingresso una stringa o un array di stringhe (è quindi possibile applicare anche più middleware ad una rotta)
+
+        - adesso se provo ad accedere a product/create senza essere loggato vengo reindirizzato alla pagina di login
+
+- Il middleware 'auth' mantiene l'ultima rotta a cui l'utente ha provato ad accedere prima di essere autenticato
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+## CRUD ##
+
+- **Create, Read, Update, Delete**
+Sono le 4 operazioni base che si possono fare in un Database
+
+        - Create: Già vista nel ProductController con il metodo Product::create()
+
+        - *Read: Già vista nel ProductController con il metodo Product::all()
+                - Product::all() restituisce un oggetto di tipo collection. Le collection hanno dei metodi
+                Documentazione collection: https://laravel.com/docs/12.x/collections
+
+- E' possibile creare una migrazione, il controller e un set di istruzioni CRUD al momento della creazione di un modello con la command line
+
+*php artistan make:model NomeModello -mcr*
+
+        m => migration
+        c => controller
+        r => resources (del controller)
+
+Ad esempio con la command line " php artistan make:model Article -mcr "
+
+        - la migrazione " create_articles_table "
+        - il controller " ArticleController "
+        - i metodi     
+                - index() - Display a listing of the resource.
+                - create() - Show the form for creating a new resource.
+                - store() - Store a newly created resource in storage.
+                - show() - Display the specified resource.
+                - edit() - Show the form for editing the specified resource.
+                - update() - Update the specified resource in storage.
+                - destroy() - Remove the specified resource from storage.

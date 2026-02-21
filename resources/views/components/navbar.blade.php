@@ -8,7 +8,12 @@
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="{{route('home')}}">Home</a>
         <a class="nav-link" href="{{route('product.index')}}">Prodotti</a>
-        <a class="nav-link" href="{{route('product.create')}}">Inserisci</a>
+        <a class="nav-link" href="{{route('article.index')}}">Articoli</a>
+        @auth
+          
+        <a class="nav-link" href="{{route('product.create')}}">Inserisci Prodotto</a>
+        <a class="nav-link" href="{{route('article.create')}}">Inserisci Articolo</a>
+        @endauth
         
         @if (Auth::user())
         {{-- 

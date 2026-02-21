@@ -10,23 +10,9 @@
 
     </header>
 
-    {{-- snippet che inserisce un messaggio di successo --}}
-    @if (session('productInserted'))
-        <div class="alert alert-success">
-            {{ session('productInserted') }}
-        </div>
-    @endif
+    <x-display-message/>
 
-    {{-- snippet che inserisce un messaggio di errore di validazione --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-display-errors/>
 
     <div class="container my-5">
         <div class="row justify-content-center">
