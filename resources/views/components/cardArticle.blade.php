@@ -8,10 +8,16 @@
         <h5 class="card-title">{{$article->title}}</h5>
         <h6 class="card-subtitle">{{$article->subtitle}}</h6>
         <p class="card-text">{{$article->body}}</p>
-        <a href="{{route('article.show', compact('article'))}}" class="btn btn-primary">Go Somewhere</a>
+        <a href="{{route('article.show', compact('article'))}}" class="btn btn-primary">Vedi articolo</a>
         {{-- 
         Laravel permette di passare l'intero oggetto article, ricavandone solo l'id
         Solitamente si passa il parametro con la sintassi ['id' => $article->id]
         --}}
+        <a href="{{route('article.edit', compact('article'))}}" class="btn btn-warning">Modifica articolo</a>
+        <form action="{{route('article.destroy', compact('article'))}}" method="POST">
+            @method('DELETE')
+            @csrf
+            <button class="btn btn-danger" type="submit">Elimina articolo</button>
+        </form>
     </div>
 </div>

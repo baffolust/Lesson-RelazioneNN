@@ -31,15 +31,36 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
 
-        $article = $request->only(['title', 'subtitle', 'body']);
+        /*      METODO #1 
+        Funzionante e più snello, 
+        ma ATTENZIONE
+        le i parametri passati nella request devono avere gli stessi nomi di quelli del modello Article
 
+        $article = $request->only(['title', 'subtitle', 'body']);
 
         if ($request->hasFile('img')) {
             $article['img'] = $request->file('img')->store('img', 'public');
         }
 
+        Article::create($article); // crea oggetto nel DB
 
-        Article::create($article);
+
+        return redirect()->back()->with('message', 'articolo inserito'); */
+
+        /*      METODO #2
+        Funziona con tutti 
+*/
+
+        $article = Article::create([
+            'title' => $request->title,
+            'subtitle' => $request->subtitle,
+            'body' => $request->body
+        ]);
+
+        if ($request->file('img')) {
+            $article->img = $request->file('img')->store('img', 'public');
+            $article->save(); // salva l'oggetto nel DB
+        }
 
         return redirect()->back()->with('message', 'articolo inserito');
     }
@@ -57,7 +78,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        return view('article.edit', compact('article'));
     }
 
     /**
@@ -65,7 +86,23 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+
+        // Controllo che sia stata caricata una nuova immagine dall'utente
+        if ($request->file('img')) {
+            $img = $request->file('img')->store('img', 'public');
+        } else {
+            $img = $article->img;
+        }
+
+        // Si esegue il metodo update sull'oggetto article. Funziona come il metodo create della Classe Article
+        $article->update([
+            'title' => $request->title,
+            'subtitle' => $request->subtitle,
+            'body' => $request->body,
+            'img' => $img
+        ]);
+
+        return redirect(route('article.index'))->with('message', 'Articolo Modificato');
     }
 
     /**
@@ -73,6 +110,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $article->delete();
+        return redirect()->back()->with('message', 'Articolo Eliminato');
     }
 }

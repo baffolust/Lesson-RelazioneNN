@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -20,8 +21,19 @@ class Product extends Model
         'name',
         'description',
         'price', 
-        'img'
+        'img',
+        'user_id'
     ];
+
+    /**
+     * Get the user that owns the product.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+        //Istruire il modello sulla relazione Many-to-One. Quando richiamo il metodo user, ci ritorna lo user legato al prodotto 
+        
+    }
 
     
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductController extends Controller
@@ -72,8 +73,10 @@ class ProductController extends Controller
             'name' => $name,
             'description' => $description,
             'price' => $price,
-            'img' => $img
+            'img' => $img,
             // aggiunta del dato img catturato nel parametro $img
+            'user_id' => Auth::user()->id
+            // è sempre funzionante perché la rotta store è accessibile solo ad utenti autenticati
 
         ]);
 

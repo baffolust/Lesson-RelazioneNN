@@ -27,6 +27,10 @@
         e
         'img' => $img
 
+- [UPDATE]
+        Aggiunta la logica per gestire insieme default (immagine di default se utente non carica immagini) e nullable() che permette all'utente di poter non caricare l'immagine senza incappare nell'errore storage(null)
+        Vedi ArticleController
+
 **MODEL (Product)**
 - Aggiungere il nuovo parametro al modello
 
@@ -75,3 +79,71 @@ E' necessario fare un controllo di validazione PRIMA di eseguire il metodo store
         Da inserire nella vista in cui è presente una validazione dei dati
 
 
+## CRUD ##
+
+- **Create, Read, Update, Delete**
+Sono le 4 operazioni base che si possono fare in un Database
+
+        - Create: Già vista nel ProductController con il metodo Product::create()
+
+        - *Read: Già vista nel ProductController con il metodo Product::all()
+                - Product::all() restituisce un oggetto di tipo collection. Le collection hanno dei metodi
+                Documentazione collection: https://laravel.com/docs/12.x/collections
+
+- E' possibile creare una migrazione, il controller e un set di istruzioni CRUD al momento della creazione di un modello con la command line
+
+*php artistan make:model NomeModello -mcr*
+
+        m => migration
+        c => controller
+        r => resources (del controller)
+
+Ad esempio con la command line " php artistan make:model Article -mcr "
+
+        - la migrazione " create_articles_table "
+        - il controller " ArticleController "
+        - i metodi     
+                - index() - Display a listing of the resource.
+                - create() - Show the form for creating a new resource.
+                - store() - Store a newly created resource in storage.
+                - show() - Display the specified resource.
+                - edit() - Show the form for editing the specified resource.
+                - update() - Update the specified resource in storage.
+                - destroy() - Remove the specified resource from storage.
+
+
+- **UPDATE**
+Ci sono 2 operazioni che devono essere eseguite
+        - Creare un form pre-compilato con i dati con i dati dell'articolo che vogliamo aggiornare (VIEW)
+        - Creare un metodo che aggiorni l'articolo nel DB (Controller)
+
+ *VIEW*
+ - Per rotta e funzioni che mostrano la vista in cui modificare un oggetto si utilizza la nomenclatura EDIT, fornita già nella crezione dell'article 
+
+        edit() - Show the form for editing the specified resource.
+
+rotta: Route::get('/article/edit', [ArticleController::class, 'edit'])->name('article.edit');
+
+- Il form HTML base ammette 2 metodi: GET e POST. L'update è una scrittura su DB, di tipo "new" (o "crezione"). Per indicare al server che stiamo facendo un'operazione di tipo "update" di un record è necessario utilizzare il metodo PUT, che però non è supportato da HTML base. Per portelo fare si utilizza la direttiva di Laravel
+
+        @method('PUT')
+        Questa operazione si chiama spoofing
+
+*CONTROLLER*
+- Si modifica la classe update del controller, che richiede in ingresso $request (dal form) e $article che deve essere passato nel form 
+
+        route('article.update', compact('article'))
+
+Nel controller si utilizza il metodo update() dell'oggetto $article, che funziona come il create della classe Article
+
+        $article->update([
+                #parametri
+        ]);
+
+
+**DELETE**
+- Si modifica la classe destroy del controller che richiede in ingresso $article che deve essere passato nel form 
+
+        route('article.update', compact('article'))
+
+Nel controller si utilizza il metodo destroy() dell'oggetto $article
