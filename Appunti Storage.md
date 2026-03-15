@@ -98,6 +98,8 @@ Sono le 4 operazioni base che si possono fare in un Database
         c => controller
         r => resources (del controller)
 
+NB: posso utilizzare anche solo -m -c -r per creare uno dei 3 strumenti. 
+
 Ad esempio con la command line " php artistan make:model Article -mcr "
 
         - la migrazione " create_articles_table "
@@ -147,3 +149,22 @@ Nel controller si utilizza il metodo update() dell'oggetto $article, che funzion
         route('article.update', compact('article'))
 
 Nel controller si utilizza il metodo destroy() dell'oggetto $article
+
+
+## SEEDER ##
+
+
+Se ad esempio voglio creare una tabella con dei record prefedefiniti, non editabili dall'esterno, non mi interessa neanche creare un crud. Posso creare solo un modello e la migrazione che crea contestualmente dei valori. 
+
++ In fase di sviluppo è utile creare DB già popolati. In questo caso si utilizzano i seeder
+
+        php artisan make:seeder nometabellaSeeder
+
+Laravel crea il file nometabellaSeeder.php nella cartella database/seeders, in cui scrivere la logica per popolare la tabella.
+Va poi aggiunta
+
+        $this->call([TagSeeder::class]);
+
+al metodo run() di database/seeders/DatabaseSeeder.php. Infine va fatto partire i seed
+
+        php artisan db:seed (oppure php artisan db:seed --class=TagSeeder, per utilizzare solo il seeder TagSeeder)

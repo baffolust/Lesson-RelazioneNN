@@ -1,18 +1,11 @@
 <x-layout>
 
 
-    <header class="container-fluid">
-        <div class="row justify-content-center bg-warning">
-            <div class="col-12 text-center">
-                <h1> INSERISCI ARTICOLO </h1>
-            </div>
-        </div>
+    <x-mastehead title='Inserisci Articolo' />
 
-    </header>
+    <x-display-message />
 
-    <x-display-message/>
-
-    <x-display-errors/>
+    <x-display-errors />
 
     <div class="container my-5">
         <div class="row justify-content-center">
@@ -42,6 +35,11 @@
                     <div class="mb-3">
                         <label for="img" class="form-label">Inserisci immagine</label>
                         <input name="img" type="file" class="form-control" id="img">
+                    </div>
+                    <div class="row">
+                        @foreach ($tags as $tag)
+                            <x-tagCheckbox :tag="$tag" />
+                        @endforeach
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>

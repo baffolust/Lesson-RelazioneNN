@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class ArticleController extends Controller
 {
@@ -22,7 +25,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('article.create');
+        $tags = Tag::all();
+        return view('article.create', compact('tags'));
     }
 
     /**
@@ -62,6 +66,9 @@ class ArticleController extends Controller
             $article->save(); // salva l'oggetto nel DB
         }
 
+        $article->tags()->attach($request->tags);
+        // tags() richiama il metodo many-to-many definito nel modello
+        // attach($request->tags) crea record nella tabella pivot legati all'articolo
         return redirect()->back()->with('message', 'articolo inserito');
     }
 
@@ -78,7 +85,8 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        return view('article.edit', compact('article'));
+        $tags = Tag::all();
+        return view('article.edit', compact('article','tags'));
     }
 
     /**
@@ -89,6 +97,7 @@ class ArticleController extends Controller
 
         // Controllo che sia stata caricata una nuova immagine dall'utente
         if ($request->file('img')) {
+            Storage::disk('public')->delete($article->img);
             $img = $request->file('img')->store('img', 'public');
         } else {
             $img = $article->img;
@@ -102,6 +111,8 @@ class ArticleController extends Controller
             'img' => $img
         ]);
 
+        $article->tags()->sync($request->tags); //sincronizza i tag nella tabella pivot, aggiungendo e/o rimuovendo relazioni
+
         return redirect(route('article.index'))->with('message', 'Articolo Modificato');
     }
 
@@ -110,6 +121,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        $article->tags()->detach(); // Elimina i vincoli di relazione nella tabella pivot
         $article->delete();
         return redirect()->back()->with('message', 'Articolo Eliminato');
     }

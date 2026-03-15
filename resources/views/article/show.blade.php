@@ -1,13 +1,6 @@
 <x-layout>
 
-    <header class="container-fluid">
-        <div class="row justify-content-center bg-warning">
-            <div class="col-12 text-center">
-                <h1> Articolo {{$article->title}} </h1>
-            </div>
-        </div>
-
-    </header>
+     <x-mastehead title='Articolo {{$article->title}}' />
 
 
     <div class="container">

@@ -12,7 +12,7 @@
 
 **ONE-TO-MANY**
 
-- La tabella A ha una relazione "one to many" con la tabella B quando un record della tabella A ha più record in relazione con la tabella B.
+- La tabella A ha una relazione "one to many" con la tabella B quando un record della tabella A ha più record in relazione con la tabella B, ma un record della tabella B ha un solo record in relazione con la tabella A.
         
         esempio: tabella "utenti" e tabella "articoli inseriti"
 
@@ -26,6 +26,20 @@ Questo tipo di chiave è detta "Foreign KEY"
 
 - Documentazione: https://laravel.com/docs/12.x/eloquent-relationships#one-to-many
 
+
+**MANY-TO-MANY**
+
+- La tabella A ha una relazione "many to many" con la tabella B quando un record della tabella A ha più record in relazione con la tabella B e un record della tabella B ha più record in relazione con la tabella A.
+        
+        esempio: tabella "prodotti" e tabella "tag"
+
+- Per gestire questa complessità, si utilizza una *tabella Pivot* con la seguente logica
+
+        Tabella A <- Relazione 1-N -> Tabella Pivot 
+        Tabella B <- Relazione 1-N -> Tabella Pivot 
+
+- La tabella pivot avrà 2 foreign key per gestire le 2 relazioni 1-N
+- Sarà la tabella a mantenere i vincoli, nelle tabelle A e B non sono presenti relazioni
 
 **---------------------------------------------------------------------------------------**
 **---------------------------------------------------------------------------------------**
@@ -114,3 +128,51 @@ Devo poi aggiornare il fillable aggiungendo user_id
 
 - La funzione belongsTo() restituisce un oggetto di tipo belongsTo (vedi dd(product->user()) per capire la complessità)
 Eloquent, attraverso la nomenclatura indicata nella creazione delle tabelle e nelle relazioni, fornisce anche la proprietà user. Così è possibile riferirsi al modello user direttamente. Questo è chiamato traversal-model
+
+
+**---------------------------------------------------------------------------------------**
+**---------------------------------------------------------------------------------------**
+
+# ONE TO MANY
+
+**MIGRAZIONE**
+
++ Per creare una tabella pivot tra due tabelle è necessario utilizzare una sintassi specifica di laravel
+
+`       php artisan make:migration create_modelA_modelB_table `
+
+in cui:
+- modelA e modelB sono i nomi dei modelli, **in minuscolo**, le cui tabelle sono da mettere in relazione N-N
+- modelA e modelB vanno scritti **in ordine alfabetico**
+
++ Inserire nella migrazione della pivot le due foreign_key
+
+**MODELLO**
+
++ E' necessario istruire i modelli A e B alla relazione Many-to-Many
+
+documentazione: https://laravel.com/docs/12.x/eloquent-relationships#many-to-many
+
++ Inserire nei modelli lo stesso metodo BelongsToMany
+
+  public function roles() {
+        return $this->belongsToMany(Role::class);
+    }
+
+**CONTROLLER**
+
++ *create*: Alle viste degli articoli possono essere resi disponibile i Tag
+        - Per modificare qualcosa in una tabella, bisogna usare sempre il metodo, non il traversal model.
+
++ *store*: Metodo attach() che crea una relazione one-to-many nella tabella pivot. Se parto da article, creerà tanti record quanti sono i tag selezionati.
+
++ *update*: Metodo sync() che aggiorna aggiungendo e/o rimuovendo relazioni dalla tabella pivot
+
++ *destroy*: Metodo detach() che rimuove tutte le relazioni dalla tabella pivot
+
+
+**VIEW**
+
++ Per legegre qualcosa relativo ad una relazione si può usare il Traversal Model. Ad esempio in product abbiamo definito la funzione user() per ritornare il la foreignKey dell'utente legato al prodotto. Nella vista non è necessario richiamare la funzione, ma è possibile richiamare la proprietà user per attraversare la tabella: modello riferimento ($product) -> modello collegato (user) -> proprietà (id)
+
++ 

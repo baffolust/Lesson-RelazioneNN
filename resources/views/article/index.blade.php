@@ -1,13 +1,6 @@
 <x-layout>
 
-    <header class="container-fluid">
-        <div class="row justify-content-center bg-warning">
-            <div class="col-12 text-center">
-                <h1> Tutti gli articoli </h1>
-            </div>
-        </div>
-
-    </header>
+     <x-mastehead title='Tutti gli articoli' />
 
     <x-display-message/>
 
